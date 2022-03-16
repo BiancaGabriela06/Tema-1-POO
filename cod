@@ -1,0 +1,255 @@
+#include <iostream>
+#include <cstring>
+#include <vector>
+#define N 10000
+using namespace std;
+
+
+
+class Accesoriu
+{
+    string nume, culoare;
+    double pret;
+    int id;
+
+public:
+    /// GETTERS AND SETTERS///
+    void set_Id(int idd);
+    int get_Id();
+
+    void set_Pret(double ppret);
+    double get_Pret();
+
+    void set_Culoare(string cculoare);
+    string get_Culoare();
+
+    void set_Nume(string nnume);
+    string get_Nume();
+
+
+
+};
+
+void Accesoriu::set_Culoare(string cculoare) {  Accesoriu:: culoare=cculoare; }
+
+string Accesoriu::get_Culoare() { return culoare; }
+
+void Accesoriu::set_Id(int idd) { Accesoriu::id=idd; }
+
+int Accesoriu::get_Id() { return id; }
+
+void Accesoriu::set_Nume(string nnume) { Accesoriu:: nume=nnume; }
+
+string Accesoriu::get_Nume() { return nume; }
+
+void Accesoriu::set_Pret(double ppret) { Accesoriu:: pret=ppret; }
+
+double Accesoriu::get_Pret() { return pret; }
+
+
+class Angajat
+{
+    string nume;
+    double salariu;
+public:
+
+    void set_Nume(string nnume);
+    string get_Nume();
+
+    void set_Salariu(double ssalariu);
+    double get_Salariu();
+
+
+};
+
+void Angajat::set_Nume(string nnume) { Angajat:: nume = nnume;}
+
+string Angajat::get_Nume() {return nume;}
+
+void Angajat::set_Salariu(double ssalariu) {Angajat:: salariu=ssalariu;}
+
+double Angajat::get_Salariu() {return salariu;}
+
+
+
+class Boutique
+{
+    Accesoriu *accesorii;
+    Angajat angajati[10];
+
+    int nr_accesorii, nr_angajati;
+    int i;
+
+public:
+
+    /// GETTERS AND SETTERS///
+    void set_NrAccesorii(int nnr_accesorii)
+    {
+        nr_accesorii = nnr_accesorii;
+    }
+    int get_NrAccesorii()
+    {
+        return nr_accesorii;
+    }
+
+    void set_NrAngajati(int nnr_angajati)
+    {
+        nr_angajati = nnr_angajati;
+    }
+
+    int get_NrAngajati()
+    {
+        return nr_angajati;
+    }
+
+
+    ///CONSTRUCTORI & DESTRUCTORI///
+    Boutique(string nnume, string cculoare, int idd, double ppret) /// constructor de initializare (cu parametrii)
+    {
+        for(i=0; i<nr_accesorii; i++)
+        {
+            accesorii[i].set_Nume(nnume);
+            accesorii[i].set_Culoare(cculoare);
+            accesorii[i].set_Pret(ppret);
+            accesorii[i].set_Id(idd);
+        }
+
+    }
+
+    Boutique() /// constructor de initializare (fara parametrii) cu null pe fiecare componenta
+    {
+        for(i=0; i<nr_accesorii; i++)
+        {
+            accesorii[i].set_Nume("");
+            accesorii[i].set_Culoare("");
+            accesorii[i].set_Pret(0);
+            accesorii[i].set_Id(0);
+        }
+
+    }
+    ~Boutique() /// destructor care dezaloca toate "accesoriile" pointate de componentele vectorului
+    {
+        nr_accesorii = 0;
+        delete[]accesorii;
+        cout << "obiect distrus" <<"\n";
+
+    }
+
+    void AdaugareAccesoriu( Accesoriu x);
+
+    void  eliminare(string nnume); /// eliminare accesoriu cu numele X
+
+    void eliminare( double ppret); /// eliminare accesoriu dupa un anumit pret
+
+    void eliminare(int salary);
+
+    void  Celmaiieftin_Accesoriu();
+};
+
+
+
+void Boutique::AdaugareAccesoriu(Accesoriu x)
+{
+    accesorii[nr_accesorii+1] = x;
+}
+
+void Boutique::eliminare(string nnume) {
+    int i, m = -1;
+    Accesoriu *newarr = new Accesoriu[nr_accesorii];
+
+    for(i=0; i<nr_accesorii; i++)
+        if(accesorii[i].get_Nume() != nnume)
+        {
+            newarr[m++] = accesorii[i];
+
+        }
+    delete[]accesorii;
+    accesorii = newarr;
+}
+
+
+void Boutique::eliminare(double ppret)
+{
+    int i, m = -1;
+    Accesoriu *newarr = new Accesoriu[nr_accesorii];
+
+    for(i=0; i<nr_accesorii; i++)
+        if(accesorii[i].get_Pret() != ppret)
+        {
+            newarr[m++] = accesorii[i];
+
+        }
+    delete[]accesorii;
+    accesorii = newarr;
+}
+
+void Boutique::eliminare(int salary)
+{
+    int i;
+    int m = -1;
+    Angajat newarr[10];
+    for(i=0; i<nr_angajati; i++)
+          if(angajati[i].get_Salariu() != salary)
+          {
+               newarr[m++] = angajati[i];
+
+          }
+
+    nr_angajati = m;
+    for(i=0; i<m; i++)
+        angajati[i]=newarr[i];
+}
+
+void Boutique::Celmaiieftin_Accesoriu()
+{
+    int poz, i;
+    double vmin=300;
+    for(i=0; i<nr_accesorii; i++)
+        if(accesorii[i].get_Pret() < vmin)
+            vmin = accesorii[i].get_Pret();
+    for(i=0; i<nr_accesorii; i++)
+        if(accesorii[i].get_Pret()==vmin)
+            cout << accesorii[i].get_Id() <<"\n";
+}
+
+int main()
+{
+
+    cout << "Bine ati venit in Boutique!"<<"\n";
+    Accesoriu a1, a2, a3;
+    Boutique B;
+    
+    a1.set_Id(1);
+    a1.set_Nume("palarie");
+    a1.set_Culoare("rosie");
+    a1.set_Pret(50.0);
+    a2.set_Id(2);
+    a2.set_Nume("palarie");
+    a2.set_Culoare("mov");
+    a2.set_Pret(50.0);
+    a3.set_Id(3);
+    a3.set_Nume("bereta");
+    a3.set_Culoare("rosie");
+    a3.set_Pret(75.0);
+
+    cout <<"Accesoriile noastre sunt: "<<"\n";
+    cout << a1.get_Nume()<<" "<<a1.get_Culoare()<<" "<<a1.get_Pret() <<"\n";
+    cout << a2.get_Nume() <<" "<<a2.get_Culoare()<<" "<<a2.get_Pret()<<"\n";
+    cout << a3.get_Nume()<<" "<<a3.get_Culoare()<<" "<<a3.get_Pret() <<"\n";
+
+    Accesoriu a4;
+    a4 = a1;
+    cout << a4.get_Nume()<<" "<<a4.get_Culoare()<<" "<<a4.get_Pret() <<"\n";
+
+
+    Angajat p1, p2;
+    p1.set_Nume("Popa Adrian");
+    p1.set_Salariu(2000);
+    p2.set_Nume("Mergescu Mirigel");
+    p2.set_Salariu(2000);
+
+    cout <<"Angajati: "<<"\n";
+    cout << p1.get_Nume()<<" "<< p1.get_Salariu()<<"\n";
+    cout << p2.get_Nume()<<" "<< p2.get_Salariu()<<"\n";
+    return 0;
+}
