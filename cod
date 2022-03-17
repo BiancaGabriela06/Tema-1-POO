@@ -77,7 +77,7 @@ class Boutique
     Accesoriu *accesorii;
     Angajat angajati[10];
 
-    int nr_accesorii, nr_angajati;
+    int nr_accesorii=-1, nr_angajati=-1;
     int i;
 
 public:
@@ -104,17 +104,15 @@ public:
 
 
     ///CONSTRUCTORI & DESTRUCTORI///
-    Boutique(string nnume, string cculoare, int idd, double ppret) /// constructor de initializare (cu parametrii)
+    /// CONSTRUCTOR DE COPIERE
+    Boutique(Accesoriu *newarr)
     {
+        int i;
         for(i=0; i<nr_accesorii; i++)
-        {
-            accesorii[i].set_Nume(nnume);
-            accesorii[i].set_Culoare(cculoare);
-            accesorii[i].set_Pret(ppret);
-            accesorii[i].set_Id(idd);
-        }
+            newarr[i] = accesorii[i];
 
     }
+
 
     Boutique() /// constructor de initializare (fara parametrii) cu null pe fiecare componenta
     {
@@ -135,6 +133,7 @@ public:
 
     }
 
+
     void AdaugareAccesoriu( Accesoriu x);
 
     void  eliminare(string nnume); /// eliminare accesoriu cu numele X
@@ -144,6 +143,8 @@ public:
     void eliminare(int salary);
 
     void  Celmaiieftin_Accesoriu();
+
+    void Afisare_Accesorii();
 };
 
 
@@ -212,13 +213,21 @@ void Boutique::Celmaiieftin_Accesoriu()
             cout << accesorii[i].get_Id() <<"\n";
 }
 
+void Boutique::Afisare_Accesorii()
+{
+    int i;
+    for(i=0; i<nr_accesorii; i++)
+        cout << accesorii[i].get_Id()<<" "<<accesorii[i].get_Nume()<<"\n";
+
+}
+
 int main()
 {
 
     cout << "Bine ati venit in Boutique!"<<"\n";
     Accesoriu a1, a2, a3;
     Boutique B;
-    
+
     a1.set_Id(1);
     a1.set_Nume("palarie");
     a1.set_Culoare("rosie");
@@ -232,24 +241,18 @@ int main()
     a3.set_Culoare("rosie");
     a3.set_Pret(75.0);
 
-    cout <<"Accesoriile noastre sunt: "<<"\n";
-    cout << a1.get_Nume()<<" "<<a1.get_Culoare()<<" "<<a1.get_Pret() <<"\n";
-    cout << a2.get_Nume() <<" "<<a2.get_Culoare()<<" "<<a2.get_Pret()<<"\n";
-    cout << a3.get_Nume()<<" "<<a3.get_Culoare()<<" "<<a3.get_Pret() <<"\n";
+    B.AdaugareAccesoriu(a1);
+    B.AdaugareAccesoriu(a2);
+    B.Afisare_Accesorii();
+    //cout <<"Accesoriile noastre sunt: "<<"\n";
+   // cout << a1.get_Nume()<<" "<<a1.get_Culoare()<<" "<<a1.get_Pret() <<"\n";
+    //cout << a2.get_Nume() <<" "<<a2.get_Culoare()<<" "<<a2.get_Pret()<<"\n";
+    //cout << a3.get_Nume()<<" "<<a3.get_Culoare()<<" "<<a3.get_Pret() <<"\n";
 
     Accesoriu a4;
     a4 = a1;
-    cout << a4.get_Nume()<<" "<<a4.get_Culoare()<<" "<<a4.get_Pret() <<"\n";
+    //cout << a4.get_Nume()<<" "<<a4.get_Culoare()<<" "<<a4.get_Pret() <<"\n";
 
 
-    Angajat p1, p2;
-    p1.set_Nume("Popa Adrian");
-    p1.set_Salariu(2000);
-    p2.set_Nume("Mergescu Mirigel");
-    p2.set_Salariu(2000);
-
-    cout <<"Angajati: "<<"\n";
-    cout << p1.get_Nume()<<" "<< p1.get_Salariu()<<"\n";
-    cout << p2.get_Nume()<<" "<< p2.get_Salariu()<<"\n";
     return 0;
 }
