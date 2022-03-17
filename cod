@@ -2,9 +2,11 @@
 #include <cstring>
 #include <vector>
 #define N 10000
+
 using namespace std;
 
 
+int max_size = 100;
 
 class Accesoriu
 {
@@ -75,9 +77,10 @@ double Angajat::get_Salariu() {return salariu;}
 class Boutique
 {
     Accesoriu *accesorii;
+    accesoriu = new Accesoriu[100];
     Angajat angajati[10];
 
-    int nr_accesorii=-1, nr_angajati=-1;
+    int nr_accesorii, nr_angajati;
     int i;
 
 public:
@@ -105,6 +108,12 @@ public:
 
     ///CONSTRUCTORI & DESTRUCTORI///
     /// CONSTRUCTOR DE COPIERE
+
+    Boutique()
+    {
+        accesoriu = new Accesoriu[100];
+    }
+
     Boutique(Accesoriu *newarr)
     {
         int i;
@@ -155,7 +164,19 @@ public:
 
 void Boutique::AdaugareAccesoriu(Accesoriu x)
 {
-    accesorii[nr_accesorii+1] = x;
+    Accesoriu *newarr;
+    if( nr_accesorii  + 1 > max_size) {
+        newarr = new Accesoriu[nr_accesorii];
+        max_size = max_size * 2;
+    }
+
+    newarr = accesoriu;
+    newarr[nr_accesorii+1] = x;
+
+    delete[]accesorii;
+    accesorii = new Accesoriu[nr_accesorii + 1];
+    accesorii = newarr;
+
 }
 
 void Boutique::EliminareAccesoriu(int idd) {
