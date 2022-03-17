@@ -2,89 +2,123 @@
 #include <cstring>
 #include <vector>
 #define N 10000
-
+ 
 using namespace std;
-
-
+ 
 int max_size = 100;
-
+ 
 class Accesoriu
 {
     string nume, culoare;
     double pret;
     int id;
-
+ 
 public:
     /// GETTERS AND SETTERS///
     void set_Id(int idd);
     int get_Id();
-
+ 
     void set_Pret(double ppret);
     double get_Pret();
-
+ 
     void set_Culoare(string cculoare);
     string get_Culoare();
-
+ 
     void set_Nume(string nnume);
     string get_Nume();
-
-
-
+ 
+ 
+ 
 };
-
-void Accesoriu::set_Culoare(string cculoare) {  Accesoriu:: culoare=cculoare; }
-
-string Accesoriu::get_Culoare() { return culoare; }
-
-void Accesoriu::set_Id(int idd) { Accesoriu::id=idd; }
-
-int Accesoriu::get_Id() { return id; }
-
-void Accesoriu::set_Nume(string nnume) { Accesoriu:: nume=nnume; }
-
-string Accesoriu::get_Nume() { return nume; }
-
-void Accesoriu::set_Pret(double ppret) { Accesoriu:: pret=ppret; }
-
-double Accesoriu::get_Pret() { return pret; }
-
-
+ 
+void Accesoriu::set_Culoare(string cculoare)
+{
+    Accesoriu:: culoare=cculoare;
+}
+ 
+string Accesoriu::get_Culoare()
+{
+    return culoare;
+}
+ 
+void Accesoriu::set_Id(int idd)
+{
+    Accesoriu::id=idd;
+}
+ 
+int Accesoriu::get_Id()
+{
+    return id;
+}
+ 
+void Accesoriu::set_Nume(string nnume)
+{
+    Accesoriu:: nume=nnume;
+}
+ 
+string Accesoriu::get_Nume()
+{
+    return nume;
+}
+ 
+void Accesoriu::set_Pret(double ppret)
+{
+    Accesoriu:: pret=ppret;
+}
+ 
+double Accesoriu::get_Pret()
+{
+    return pret;
+}
+ 
+ 
 class Angajat
 {
     string nume;
     double salariu;
 public:
-
+ 
     void set_Nume(string nnume);
     string get_Nume();
-
+ 
     void set_Salariu(double ssalariu);
     double get_Salariu();
-
-
+ 
+ 
 };
-
-void Angajat::set_Nume(string nnume) { Angajat:: nume = nnume;}
-
-string Angajat::get_Nume() {return nume;}
-
-void Angajat::set_Salariu(double ssalariu) {Angajat:: salariu=ssalariu;}
-
-double Angajat::get_Salariu() {return salariu;}
-
-
-
+ 
+void Angajat::set_Nume(string nnume)
+{
+    Angajat:: nume = nnume;
+}
+ 
+string Angajat::get_Nume()
+{
+    return nume;
+}
+ 
+void Angajat::set_Salariu(double ssalariu)
+{
+    Angajat:: salariu=ssalariu;
+}
+ 
+double Angajat::get_Salariu()
+{
+    return salariu;
+}
+ 
+ 
+ 
 class Boutique
 {
-    Accesoriu *accesorii;
-    accesoriu = new Accesoriu[100];
+    Accesoriu *accesorii = new Accesoriu[100];
     Angajat angajati[10];
-
+ 
     int nr_accesorii, nr_angajati;
     int i;
-
+ 
 public:
-
+ 
     /// GETTERS AND SETTERS///
     void set_NrAccesorii(int nnr_accesorii)
     {
@@ -94,154 +128,162 @@ public:
     {
         return nr_accesorii;
     }
-
+ 
     void set_NrAngajati(int nnr_angajati)
     {
         nr_angajati = nnr_angajati;
     }
-
+ 
     int get_NrAngajati()
     {
         return nr_angajati;
     }
-
-
+ 
+ 
     ///CONSTRUCTORI & DESTRUCTORI///
     /// CONSTRUCTOR DE COPIERE
-
-    Boutique()
-    {
-        accesoriu = new Accesoriu[100];
-    }
-
+ 
     Boutique(Accesoriu *newarr)
     {
         int i;
         for(i=0; i<nr_accesorii; i++)
             newarr[i] = accesorii[i];
-
     }
-
-
+ 
+ 
     Boutique() /// constructor de initializare (fara parametrii) cu null pe fiecare componenta
     {
-        for(i=0; i<nr_accesorii; i++)
+        for(i = 0; i < nr_accesorii; i++)
         {
             accesorii[i].set_Nume("");
             accesorii[i].set_Culoare("");
             accesorii[i].set_Pret(0);
             accesorii[i].set_Id(0);
         }
-
+ 
     }
     ~Boutique() /// destructor care dezaloca toate "accesoriile" pointate de componentele vectorului
     {
         nr_accesorii = 0;
         delete[]accesorii;
         cout << "obiect distrus" <<"\n";
-
+ 
     }
-
-
+ 
+ 
     void AdaugareAccesoriu( Accesoriu x);
-
+ 
     void EliminareAccesoriu( int idd);
-
+ 
     void  eliminare(string nnume); /// eliminare accesoriu cu numele X
-
+ 
     void eliminare( double ppret); /// eliminare accesoriu dupa un anumit pret
-
+ 
     void eliminare(int salary);
-
+ 
     void  Celmaiieftin_Accesoriu();
-
+ 
     void Afisare_Accesorii();
-
+ 
     void Cautare_Accesoriu(string nnume, string cculoare);
 };
-
-
-
+ 
 void Boutique::AdaugareAccesoriu(Accesoriu x)
 {
     Accesoriu *newarr;
-    if( nr_accesorii  + 1 > max_size) {
+    if(nr_accesorii  + 1 > max_size)
+    {
         newarr = new Accesoriu[nr_accesorii];
         max_size = max_size * 2;
     }
-
-    newarr = accesoriu;
+ 
+    for(int i = 0; i < nr_accesorii; ++i)
+    {
+        newarr[i] = accesorii[i];
+    }
     newarr[nr_accesorii+1] = x;
-
+ 
     delete[]accesorii;
-    accesorii = new Accesoriu[nr_accesorii + 1];
-    accesorii = newarr;
-
+    accesorii = new Accesoriu[max_size];
+    for(int i = 0; i < nr_accesorii; ++i)
+    {
+        accesorii[i] = newarr[i];
+    }
 }
-
-void Boutique::EliminareAccesoriu(int idd) {
+ 
+void Boutique::EliminareAccesoriu(int idd)
+{
     int i, m = -1;
     Accesoriu *newarr = new Accesoriu[nr_accesorii];
-
     for(i=0; i<nr_accesorii; i++)
         if(accesorii[i].get_Id() != idd)
         {
             newarr[m++] = accesorii[i];
-
         }
     delete[]accesorii;
-    accesorii = newarr;
+    accesorii = new Accesoriu[max_size];
+    for(int i = 0; i < m; ++i)
+    {
+        accesorii[i] = newarr[i];
+    }
     nr_accesorii = m;
 }
-
-void Boutique::eliminare(string nnume) {
+ 
+void Boutique::eliminare(string nnume)
+{
     int i, m = -1;
     Accesoriu *newarr = new Accesoriu[nr_accesorii];
-
+ 
     for(i=0; i<nr_accesorii; i++)
         if(accesorii[i].get_Nume() != nnume)
         {
             newarr[m++] = accesorii[i];
-
         }
     delete[]accesorii;
-    accesorii = newarr;
+    accesorii = new Accesoriu[max_size];
+    for(int i = 0; i < m; ++i)
+    {
+        accesorii[i] = newarr[i];
+    }
     nr_accesorii = m;
 }
-
-
+ 
 void Boutique::eliminare(double ppret)
 {
     int i, m = -1;
     Accesoriu *newarr = new Accesoriu[nr_accesorii];
-
+ 
     for(i=0; i<nr_accesorii; i++)
         if(accesorii[i].get_Pret() != ppret)
         {
             newarr[m++] = accesorii[i];
-
+ 
         }
     delete[]accesorii;
-    accesorii = newarr;
+    accesorii = new Accesoriu[max_size];
+    for(int i = 0; i < m; ++i)
+    {
+        accesorii[i] = newarr[i];
+    }
+    nr_accesorii = m;
 }
-
+ 
 void Boutique::eliminare(int salary)
 {
     int i;
     int m = -1;
     Angajat newarr[10];
     for(i=0; i<nr_angajati; i++)
-          if(angajati[i].get_Salariu() != salary)
-          {
-               newarr[m++] = angajati[i];
-
-          }
-
+        if(angajati[i].get_Salariu() != salary)
+        {
+            newarr[m++] = angajati[i];
+        }
+ 
     nr_angajati = m;
     for(i=0; i<m; i++)
         angajati[i]=newarr[i];
 }
-
+ 
 void Boutique::Cautare_Accesoriu(string nnume, string cculoare)
 {
     bool ok = 0;
@@ -250,16 +292,16 @@ void Boutique::Cautare_Accesoriu(string nnume, string cculoare)
         if(accesorii[i].get_Nume() == nnume && accesorii[i].get_Culoare() == cculoare)
         {
             ok = 1;
-           cout << accesorii[i].get_Id() <<" "<< accesorii[i].get_Pret() <<"\n";
+            cout << accesorii[i].get_Id() <<" "<< accesorii[i].get_Pret() <<"\n";
         }
-
+ 
     if(ok == 0)
         cout << "Nu am gasit produsul dorit.";
-
+ 
 }
 void Boutique::Celmaiieftin_Accesoriu()
 {
-    int poz, i;
+    int i;
     double vmin=300;
     for(i=0; i<nr_accesorii; i++)
         if(accesorii[i].get_Pret() < vmin)
@@ -268,65 +310,65 @@ void Boutique::Celmaiieftin_Accesoriu()
         if(accesorii[i].get_Pret()==vmin)
             cout << accesorii[i].get_Id() <<"\n";
 }
-
+ 
 void Boutique::Afisare_Accesorii()
 {
     int i;
     for(i=0; i<nr_accesorii; i++)
         cout << accesorii[i].get_Id()<<" "<<accesorii[i].get_Nume()<<"\n";
-
+ 
 }
-
+ 
 Accesoriu a1, a2, a3;
 Boutique B;
-
+ 
 void Menu()
 {
-     int task;
-     string Culoare_Accesoriu, Nume_Accesoriu;
-     int ID_Accesoriu;
-     cout << " Esti in cautarea unui accesoriu? Ai venit in locul potrivit. Iti prezentam gama noastra de produse.";
-     B.Afisare_Accesorii();
-
-     cout << " Daca vrei sa iesi din magazin, apasa tasta 0. Daca vrei sa continui, apasa tasta 1.";
-     cin >> task;
-     while(task !=0) {
-
-         cout <<" Vrei sa cauti un accesoriu dupa nume si culoare? Daca da, apasa 1, daca nu, apasa 2.";
-         cin >> task;
-         if(task == 1)
-         { cout<< "Introdu numele accesoriului (care poate fi palarie, bereta, sapca) si culoarea ( rosu, verde, albastru).";
-             cin >> Nume_Accesoriu >> Culoare_Accesoriu;
-             B.Cautare_Accesoriu(Culoare_Accesoriu, Nume_Accesoriu);
-
-         }
-
-         if(task != 0)
-         {
-             cout << "Vrei sa cauti cel mai ieftin Accesoriu? Daca da, apasa 1, daca nu, apasa 2.";
-             cin >> task;
-             if(task == 1)
-                 B.Celmaiieftin_Accesoriu();
-             if(task!=0)
-                 cout << "Te-ai hotarat ce accesoriu vrei? Introdu id-ul lui";
-             { cin >> ID_Accesoriu;
-                 B.EliminareAccesoriu(ID_Accesoriu);
-             }
-         }
-
-     }
-
-     cout << "Te mai asteptam!";
-
+    int task;
+    string Culoare_Accesoriu, Nume_Accesoriu;
+    int ID_Accesoriu;
+    cout << " Esti in cautarea unui accesoriu? Ai venit in locul potrivit. Iti prezentam gama noastra de produse.";
+    B.Afisare_Accesorii();
+ 
+    cout << " Daca vrei sa iesi din magazin, apasa tasta 0. Daca vrei sa continui, apasa tasta 1.";
+    cin >> task;
+    while(task !=0)
+    {
+ 
+        cout <<" Vrei sa cauti un accesoriu dupa nume si culoare? Daca da, apasa 1, daca nu, apasa 2.";
+        cin >> task;
+        if(task == 1)
+        {
+            cout<< "Introdu numele accesoriului (care poate fi palarie, bereta, sapca) si culoarea ( rosu, verde, albastru).";
+            cin >> Nume_Accesoriu >> Culoare_Accesoriu;
+            B.Cautare_Accesoriu(Culoare_Accesoriu, Nume_Accesoriu);
+ 
+        }
+ 
+        if(task != 0)
+        {
+            cout << "Vrei sa cauti cel mai ieftin Accesoriu? Daca da, apasa 1, daca nu, apasa 2.";
+            cin >> task;
+            if(task == 1)
+                B.Celmaiieftin_Accesoriu();
+            if(task!=0)
+                cout << "Te-ai hotarat ce accesoriu vrei? Introdu id-ul lui";
+            {
+                cin >> ID_Accesoriu;
+                B.EliminareAccesoriu(ID_Accesoriu);
+            }
+        }
+ 
+    }
+ 
+    cout << "Te mai asteptam!";
+ 
 }
-
+ 
 int main()
 {
-
     cout << "Bine ati venit in Boutique!"<<"\n";
-
-
-
+ 
     a1.set_Id(1);
     a1.set_Nume("palarie");
     a1.set_Culoare("rosie");
@@ -339,21 +381,20 @@ int main()
     a3.set_Nume("bereta");
     a3.set_Culoare("rosie");
     a3.set_Pret(75.0);
-
+ 
     B.AdaugareAccesoriu(a1);
     B.AdaugareAccesoriu(a2);
-
+ 
     //cout <<"Accesoriile noastre sunt: "<<"\n";
-   // cout << a1.get_Nume()<<" "<<a1.get_Culoare()<<" "<<a1.get_Pret() <<"\n";
+    // cout << a1.get_Nume()<<" "<<a1.get_Culoare()<<" "<<a1.get_Pret() <<"\n";
     //cout << a2.get_Nume() <<" "<<a2.get_Culoare()<<" "<<a2.get_Pret()<<"\n";
     //cout << a3.get_Nume()<<" "<<a3.get_Culoare()<<" "<<a3.get_Pret() <<"\n";
-
+ 
     Accesoriu a4;
     a4 = a1;
     //cout << a4.get_Nume()<<" "<<a4.get_Culoare()<<" "<<a4.get_Pret() <<"\n";
-
+ 
     Menu();
-
-
+ 
     return 0;
 }
