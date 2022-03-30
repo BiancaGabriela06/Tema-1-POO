@@ -5,15 +5,58 @@
 
 using namespace std;
 
-int max_size = 100;
 
-class Accesoriu
+class Accesoriu /// clasa de baza
 {
     string nume, culoare;
     double pret;
     int id;
 
 public:
+    virtual void citire()
+    {
+        cout << "Accesoriul: ";
+        cin >> nume >> culoare >> pret >> id;
+    }
+    virtual void afisare()
+    {
+        cout << nume <<" "<< culoare<<" " << pret <<" "<< id<<" ";
+    }
+
+    /// CONSTRUCTORS AND DISTRUCTOR
+    Accesoriu(string Nume="anonim", string Culoare="neutru", double Pret=0.0, int Id=0) //constructor de initializare parametrizat
+    {
+        nume = Nume;
+        culoare = Culoare;
+        pret = Pret;
+        id = Id;
+    }
+
+    /*Accesoriu()
+    {
+        nume = "anonim";
+        culoare = "neutru";
+        pret = 0.0;
+        id = 0;
+    }*/
+
+    Accesoriu(const Accesoriu& ob) // constructor de copiere
+    {
+        nume = ob.nume;
+        culoare = ob.culoare;
+        pret = ob.pret;
+        id = ob.id;
+    }
+
+    ~Accesoriu() // destructor
+    {
+        nume="";
+        culoare="";
+        pret=0.0;
+        id = 0;
+        cout << "obiect distrus"<<"\n";
+    }
+
     /// GETTERS AND SETTERS///
     void set_Id(int idd);
     int get_Id();
@@ -27,36 +70,11 @@ public:
     void set_Nume(string nnume);
     string get_Nume();
 
-    /// CONSTRUCTORS AND DISTRUCTOR
-    Accesoriu(string Nume="anonim", string Culoare="neutru", double Pret=0.0, int Id=0) //constructor de initializare parametrizat
-    {
-          nume = Nume;
-          culoare = Culoare;
-          pret = Pret;
-          id = Id;
-    }
 
-
-    Accesoriu(const Accesoriu& ob) // constructor de copiere
-    {
-        nume = ob.nume;
-        culoare = ob.culoare;
-        this -> pret = ob.pret;
-        this -> id = ob.id;
-    }
-
-    ~Accesoriu()
-    {
-        nume="";
-        culoare="";
-        pret=0.0;
-        id = 0;
-        cout << "obiect distrus"<<"\n";
-    }
 
     friend ostream& operator<<(ostream& out, Accesoriu& ob); //afisare
     friend istream& operator>>(istream& in, Accesoriu& ob); //citire
-    Accesoriu operator=(Accesoriu);
+    Accesoriu &operator=(Accesoriu&);
 
 
 };
@@ -74,16 +92,15 @@ istream& operator>>(istream& in, Accesoriu& ob)
     return in;
 }
 
-Accesoriu Accesoriu::operator=(Accesoriu ob) // operator de atribuire explicit
+Accesoriu& Accesoriu::operator=(Accesoriu &ob) // operator de atribuire explicit
 {
-    if(this != &ob)
-    {
-          this -> nume = ob.nume;
-          this -> culoare = ob.culoare;
-          this -> pret = ob.pret;
-          this -> id = ob.id;
-    }
+    this -> nume = ob.nume;
+    this -> culoare = ob.culoare;
+    this -> id = ob.id;
+    this -> pret = ob.pret;
     return *this;
+
+
 }
 
 void Accesoriu::set_Culoare(string cculoare)
@@ -127,11 +144,38 @@ double Accesoriu::get_Pret()
     return pret;
 }
 
+class Palarie : public Accesoriu
+{
+    char size; // care poate fi  S M L
+public:
+    ///Palarie(): Accesoriu() {size = 'X';}
+    Palarie(string Nume="anonim", string Culoare="neutru", double Pret=0.0, int Id=0, char Size='X') : Accesoriu(Nume, Culoare, Pret, Id) { size = Size;}
+    Palarie(Palarie &ob) : Accesoriu(ob) {size = ob.size;}
+    void citire() { Accesoriu::citire(); cin >> size;}
+    void afisare() { Accesoriu::afisare(); cout << size;}
 
-class Boutique
+};
+
+class Ochelari : public Accesoriu
+{
+    string forma; /// hexagon, cerc, dreptunghi
+public:
+    ///Ochelari() : Accesoriu() { forma = "neutru";}
+    Ochelari(string Nume="anonim", string Culoare="neutru", double Pret=0.0, int Id=0, string Forma="neutru") : Accesoriu(Nume, Culoare, Pret, Id) { forma = Forma;}
+    Ochelari(string Forma) { forma = Forma;}
+    Ochelari(Ochelari &ob) : Accesoriu(ob) { forma = ob.forma;}
+
+    void citire() {Accesoriu::citire(); cin >> forma;}
+    void afisare() {Accesoriu::afisare(); cout << forma;}
+
+
+};
+
+/*class Boutique
 {
     Accesoriu *accesorii;
     int nr_accesorii;
+
 public:
     ///CONSTRUCTORS AND DISTRUCTOR
     Boutique(Accesoriu *arr, int n) /// Constructor de initializare parametrizat
@@ -190,20 +234,26 @@ istream& operator>>(istream& in, Boutique& ob)
     return in;
 }
 
-Boutique Boutique::operator=(Boutique) {
-    
-}
+*/
+
 int main()
 {
     /*Accesoriu *arr = new Accesoriu[3];
     Boutique b(arr,3);
     b.Afisare();*/
 
-    Accesoriu A("palarie","alb", 10, 101);
+    /*Accesoriu A("palarie","alb", 10, 101);
     Accesoriu D;
-    D = A;
+    D=A;
     cout << D;
-    cout << A;
+    cout << A;*/
+
+    Palarie ob("palarie","alb", 10, 101, 'S');
+    ob.afisare();
+    cout <<"\n";
+    Palarie ob2 = ob;
+    ob2.afisare();
+    cout <<"\n";
 
     return 0;
 }
