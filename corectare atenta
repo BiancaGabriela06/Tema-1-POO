@@ -8,6 +8,7 @@ using namespace std;
 
 class Accesoriu /// clasa de baza
 {
+protected:
     string nume, culoare;
     double pret;
     int id;
@@ -18,6 +19,7 @@ public:
         cout << "Accesoriul: ";
         cin >> nume >> culoare >> pret >> id;
     }
+
     virtual void afisare()
     {
         cout << nume <<" "<< culoare<<" " << pret <<" "<< id<<" ";
@@ -32,13 +34,13 @@ public:
         id = Id;
     }
 
-    /*Accesoriu()
+    Accesoriu() // Constructor gol
     {
-        nume = "anonim";
-        culoare = "neutru";
+        nume = "";
+        culoare = "";
         pret = 0.0;
         id = 0;
-    }*/
+    }
 
     Accesoriu(const Accesoriu& ob) // constructor de copiere
     {
@@ -48,128 +50,67 @@ public:
         id = ob.id;
     }
 
-    ~Accesoriu() // destructor
+    virtual ~Accesoriu() // destructor
     {
-        nume="";
-        culoare="";
-        pret=0.0;
-        id = 0;
-        cout << "obiect distrus"<<"\n";
+        /*nume="", culoare="", pret=0.0, id = 0;*/
+        cout << "accesoriu distrus"<<"\n";
     }
-
-    /// GETTERS AND SETTERS///
-    void set_Id(int idd);
-    int get_Id();
-
-    void set_Pret(double ppret);
-    double get_Pret();
-
-    void set_Culoare(string cculoare);
-    string get_Culoare();
-
-    void set_Nume(string nnume);
-    string get_Nume();
 
 
 
     friend ostream& operator<<(ostream& out, Accesoriu& ob); //afisare
     friend istream& operator>>(istream& in, Accesoriu& ob); //citire
-    Accesoriu &operator=(Accesoriu&);
+    virtual Accesoriu& operator=(Accesoriu&); /// va fi declarata si in alte clase
 
 
 };
 
-ostream& operator<<(ostream& out, Accesoriu& ob)
+
+
+class Palarie :  public Accesoriu
 {
-    out << "Accesoriu: " <<endl;
-    out << ob.nume <<" "<< ob.culoare <<" "<< ob.pret <<" "<<ob.id << endl;
-    return out;
-}
-
-istream& operator>>(istream& in, Accesoriu& ob)
-{
-    in >> ob.nume >> ob.culoare >> ob.pret >> ob.id;
-    return in;
-}
-
-Accesoriu& Accesoriu::operator=(Accesoriu &ob) // operator de atribuire explicit
-{
-    this -> nume = ob.nume;
-    this -> culoare = ob.culoare;
-    this -> id = ob.id;
-    this -> pret = ob.pret;
-    return *this;
-
-
-}
-
-void Accesoriu::set_Culoare(string cculoare)
-{
-    Accesoriu:: culoare=cculoare;
-}
-
-string Accesoriu::get_Culoare()
-{
-    return culoare;
-}
-
-void Accesoriu::set_Id(int idd)
-{
-    Accesoriu::id=idd;
-}
-
-int Accesoriu::get_Id()
-{
-    return id;
-}
-
-
-void Accesoriu::set_Nume(string nnume)
-{
-    Accesoriu:: nume=nnume;
-}
-
-string Accesoriu::get_Nume()
-{
-    return nume;
-}
-
-void Accesoriu::set_Pret(double ppret)
-{
-    Accesoriu:: pret=ppret;
-}
-
-double Accesoriu::get_Pret()
-{
-    return pret;
-}
-
-class Palarie : public Accesoriu
-{
+protected:
     char size; // care poate fi  S M L
+
 public:
     ///Palarie(): Accesoriu() {size = 'X';}
     Palarie(string Nume="anonim", string Culoare="neutru", double Pret=0.0, int Id=0, char Size='X') : Accesoriu(Nume, Culoare, Pret, Id) { size = Size;}
-    Palarie(Palarie &ob) : Accesoriu(ob) {size = ob.size;}
+    Palarie(Palarie &ob) : Accesoriu(ob) {size = ob.size;} /// Constructor de copiere
+    ~Palarie() {cout << "palarie distrusa"<<"\n";}
     void citire() { Accesoriu::citire(); cin >> size;}
     void afisare() { Accesoriu::afisare(); cout << size;}
+    Palarie& operator=(Palarie&);
+    friend ostream& operator<<(ostream& out, Palarie& ob);
+    friend istream& operator>>(istream& in, Palarie& ob);
+
 
 };
 
+
+
 class Ochelari : public Accesoriu
 {
+protected:
     string forma; /// hexagon, cerc, dreptunghi
+
 public:
     ///Ochelari() : Accesoriu() { forma = "neutru";}
     Ochelari(string Nume="anonim", string Culoare="neutru", double Pret=0.0, int Id=0, string Forma="neutru") : Accesoriu(Nume, Culoare, Pret, Id) { forma = Forma;}
     Ochelari(string Forma) { forma = Forma;}
-    Ochelari(Ochelari &ob) : Accesoriu(ob) { forma = ob.forma;}
+    Ochelari(Ochelari &ob) : Accesoriu(ob) { forma = ob.forma;}  ///Constructor de copiere
+    ~Ochelari() {cout <<"ochelari distrusi"<<"\n";}
 
     void citire() {Accesoriu::citire(); cin >> forma;}
     void afisare() {Accesoriu::afisare(); cout << forma;}
+    Ochelari& operator=(Ochelari&);
+    friend ostream& operator<<(ostream& out, Ochelari& ob);
+    friend istream& operator>>(istream& in, Ochelari& ob);
 
 
 };
+
+
+
 
 /*class Boutique
 {
@@ -256,4 +197,79 @@ int main()
     cout <<"\n";
 
     return 0;
+}
+
+
+///clasa Accesoriu
+Accesoriu& Accesoriu::operator=(Accesoriu &ob)  {   if(this!=&ob)
+    {
+        this -> nume = ob.nume;
+        this -> culoare = ob.culoare;
+        this -> id = ob.id;
+        this -> pret = ob.pret;
+    }
+
+    return *this;
+
+
+}
+ostream& operator<<(ostream& out, Accesoriu& ob)
+{
+    out << "Accesoriu: " <<endl;
+    out << ob.nume <<" "<< ob.culoare <<" "<< ob.pret <<" "<<ob.id << endl;
+    return out;
+}
+istream& operator>>(istream& in, Accesoriu& ob)
+{
+    in >> ob.nume >> ob.culoare >> ob.pret >> ob.id;
+    return in;
+}
+
+// clasa Palarie
+
+Palarie& Palarie::operator=( Palarie& ob)
+{
+    if(this != &ob)
+    {
+        this-> Accesoriu::operator=(ob);
+        this ->size = ob.size;
+    }
+    return *this;
+}
+ostream& operator<<(ostream& out, Palarie& ob)
+{
+    out << dynamic_cast <Accesoriu&> (ob);
+    out << "Palaria are marimea:" << ob.size;
+    return out;
+}
+istream& operator>>(istream& in, Palarie& ob)
+{
+    in >> dynamic_cast <Accesoriu&> (ob);
+    cout <<"Marimea palariei este: ";
+    in >> ob.size;
+    return in;
+}
+
+// clasa Ochelari
+Ochelari& Ochelari::operator=(Ochelari& ob)
+{
+    if(this != &ob)
+    {
+        this -> Accesoriu::operator=(ob);
+        this -> forma = ob.forma;
+    }
+    return *this;
+}
+ostream& operator<<(ostream& out, Ochelari& ob)
+{
+    out << dynamic_cast <Accesoriu&> (ob);
+    out <<"Ochelarii au forma: " << ob.forma;
+    return out;
+}
+istream& operator>>(istream& in, Ochelari& ob)
+{
+    in >> dynamic_cast <Accesoriu&> (ob);
+    cout << "Ochelarii au forma: ";
+    in >> ob.forma;
+    return in;
 }
