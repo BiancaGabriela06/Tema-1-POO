@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
+#include <typeinfo>
 #define N 10000
 
 using namespace std;
@@ -50,7 +51,7 @@ public:
         id = ob.id;
     }
 
-    virtual ~Accesoriu() // destructor
+     ~Accesoriu() // destructor
     {
         /*nume="", culoare="", pret=0.0, id = 0;*/
         cout << "accesoriu distrus"<<"\n";
@@ -76,7 +77,7 @@ public:
     ///Palarie(): Accesoriu() {size = 'X';}
     Palarie(string Nume="anonim", string Culoare="neutru", double Pret=0.0, int Id=0, char Size='X') : Accesoriu(Nume, Culoare, Pret, Id) { size = Size;}
     Palarie(Palarie &ob) : Accesoriu(ob) {size = ob.size;} /// Constructor de copiere
-    ~Palarie() {cout << "palarie distrusa"<<"\n";}
+    ~Palarie()   { /*cout << "palarie distrusa"<<"\n"; */ }
     void citire() { Accesoriu::citire(); cin >> size;}
     void afisare() { Accesoriu::afisare(); cout << size;}
     Palarie& operator=(Palarie&);
@@ -96,7 +97,6 @@ protected:
 public:
     ///Ochelari() : Accesoriu() { forma = "neutru";}
     Ochelari(string Nume="anonim", string Culoare="neutru", double Pret=0.0, int Id=0, string Forma="neutru") : Accesoriu(Nume, Culoare, Pret, Id) { forma = Forma;}
-    Ochelari(string Forma) { forma = Forma;}
     Ochelari(Ochelari &ob) : Accesoriu(ob) { forma = ob.forma;}  ///Constructor de copiere
     ~Ochelari() {cout <<"ochelari distrusi"<<"\n";}
 
@@ -189,19 +189,51 @@ int main()
     cout << D;
     cout << A;*/
 
-    Palarie ob("palarie","alb", 10, 101, 'S');
+    /*Palarie ob("palarie","alb", 10, 101, 'S');
     ob.afisare();
     cout <<"\n";
     Palarie ob2 = ob;
     ob2.afisare();
-    cout <<"\n";
+    cout <<"\n";*/
+
+    vector<Accesoriu*> a;
+    int n;
+    cout << "Introdu numarul de accesorii: ";
+    cin >> n;
+    for(int i=0; i<n; i++)
+    {
+        cout <<"Tip de Accesoriu: 1 - Palarie; 2 - Ochelari"<<"\n";
+        int op;
+        cin >> op;
+        switch(op)
+        {
+            case 1: {a.push_back(new Palarie()); break;}
+            case 2: {a.push_back(new Ochelari()); break;}
+        }
+    }
+
+
+    for(auto p = a.begin(); p != a.end(); p++)
+        (**p).citire();
+
+    /// afisare palarii
+    for(auto p = a.begin(); p!=a.end(); p++)
+        if(typeid(**p) == typeid(Palarie)) cout << *dynamic_cast<Palarie*>(*p);
+
+    /// afisare ochelari
+    for(auto p = a.begin(); p!=a.end(); p++)
+        if(typeid(**p) == typeid(Ochelari)) cout << *dynamic_cast<Ochelari*>(*p);
+
+
 
     return 0;
 }
 
 
 ///clasa Accesoriu
-Accesoriu& Accesoriu::operator=(Accesoriu &ob)  {   if(this!=&ob)
+Accesoriu& Accesoriu::operator=(Accesoriu &ob)  {
+
+    if(this!=&ob)
     {
         this -> nume = ob.nume;
         this -> culoare = ob.culoare;
@@ -215,8 +247,7 @@ Accesoriu& Accesoriu::operator=(Accesoriu &ob)  {   if(this!=&ob)
 }
 ostream& operator<<(ostream& out, Accesoriu& ob)
 {
-    out << "Accesoriu: " <<endl;
-    out << ob.nume <<" "<< ob.culoare <<" "<< ob.pret <<" "<<ob.id << endl;
+    out << ob.nume <<" "<< ob.culoare <<" "<< ob.pret <<" "<<ob.id << " ";
     return out;
 }
 istream& operator>>(istream& in, Accesoriu& ob)
@@ -239,13 +270,12 @@ Palarie& Palarie::operator=( Palarie& ob)
 ostream& operator<<(ostream& out, Palarie& ob)
 {
     out << dynamic_cast <Accesoriu&> (ob);
-    out << "Palaria are marimea:" << ob.size;
+    out << "Marimea " << ob.size<< endl;
     return out;
 }
 istream& operator>>(istream& in, Palarie& ob)
 {
     in >> dynamic_cast <Accesoriu&> (ob);
-    cout <<"Marimea palariei este: ";
     in >> ob.size;
     return in;
 }
@@ -263,13 +293,12 @@ Ochelari& Ochelari::operator=(Ochelari& ob)
 ostream& operator<<(ostream& out, Ochelari& ob)
 {
     out << dynamic_cast <Accesoriu&> (ob);
-    out <<"Ochelarii au forma: " << ob.forma;
+    out <<"Forma " << ob.forma << endl;
     return out;
 }
 istream& operator>>(istream& in, Ochelari& ob)
 {
     in >> dynamic_cast <Accesoriu&> (ob);
-    cout << "Ochelarii au forma: ";
     in >> ob.forma;
     return in;
 }
