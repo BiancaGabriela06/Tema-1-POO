@@ -76,7 +76,7 @@ protected:
 public:
     ///Palarie(): Accesoriu() {size = 'X';}
     Palarie(string Nume="anonim", string Culoare="neutru", double Pret=0.0, int Id=0, char Size='X') : Accesoriu(Nume, Culoare, Pret, Id) { size = Size;}
-    Palarie(Palarie &ob) : Accesoriu(ob) {size = ob.size;} /// Constructor de copiere
+    Palarie(const Palarie &ob) : Accesoriu(ob) {size = ob.size;} /// Constructor de copiere
     ~Palarie()   { /*cout << "palarie distrusa"<<"\n"; */ }
     void citire() { Accesoriu::citire(); cin >> size;}
     void afisare() { Accesoriu::afisare(); cout << size;}
@@ -97,7 +97,7 @@ protected:
 public:
     ///Ochelari() : Accesoriu() { forma = "neutru";}
     Ochelari(string Nume="anonim", string Culoare="neutru", double Pret=0.0, int Id=0, string Forma="neutru") : Accesoriu(Nume, Culoare, Pret, Id) { forma = Forma;}
-    Ochelari(Ochelari &ob) : Accesoriu(ob) { forma = ob.forma;}  ///Constructor de copiere
+    Ochelari(const Ochelari &ob) : Accesoriu(ob) { forma = ob.forma;}  ///Constructor de copiere
     ~Ochelari() {cout <<"ochelari distrusi"<<"\n";}
 
     void citire() {Accesoriu::citire(); cin >> forma;}
@@ -109,93 +109,120 @@ public:
 
 };
 
-
-
-
-/*class Boutique
+class Client
 {
-    Accesoriu *accesorii;
-    int nr_accesorii;
-
+protected:
+    string nume;
+    double pay;
 public:
-    ///CONSTRUCTORS AND DISTRUCTOR
-    Boutique(Accesoriu *arr, int n) /// Constructor de initializare parametrizat
+    Client(string Nume="Anonim", double Pay = 0.0)
     {
-        this -> accesorii = new Accesoriu[n];
-        for(int i=0; i<n; i++)
-            this -> accesorii[i] = arr[i];
-        nr_accesorii = n;
+        nume = Nume;
+        pay = Pay;
     }
-    ~Boutique()
+    Client( const Client &ob)
     {
-        nr_accesorii = 0;
-        delete[] accesorii;
-        cout << "boutique distrus" <<"\n";
+        nume = ob.nume;
+        pay = ob.pay;
     }
-
-    Boutique() /// constructor de initializare (fara parametrii) cu null pe fiecare componenta
+    
+    ~Client()
     {
-        accesorii = new Accesoriu[100];
-
-        for(int i = 0; i < 100; i++)
-        {
-            accesorii[i].set_Nume("");
-            accesorii[i].set_Culoare("");
-            accesorii[i].set_Pret(0);
-            accesorii[i].set_Id(0);
-        }
-
+        cout << "a disparut clientul"<<"\n";
     }
 
-    void Afisare()
-    {
-         for(int i=0; i<3; i++)
-             cout << accesorii[i].get_Nume() <<" "<< accesorii[i].get_Culoare()<<" "<< accesorii[i].get_Pret()<<" "<< accesorii[i].get_Id()<<endl;
-    }
-
-    friend ostream& operator<<(ostream& out, Boutique& ob); //afisare
-    friend istream& operator>>(istream& in, Boutique& ob); //citire
-    Boutique operator=(Boutique);
+    friend ostream& operator<<(ostream& out, Client&);
+    friend istream& operator>>(ifstream& in, Client&);
+    friend Client& operator=(Client&);
 
 };
 
-ostream& operator<<(ostream& out, Boutique& ob)
-{
-    out << ob.nr_accesorii<<endl;
-    for(int i=0; i<ob.nr_accesorii; i++)
-        out << ob.accesorii[i]<<" ";
-    return out;
-}
 
-istream& operator>>(istream& in, Boutique& ob)
-{
-    in >> ob.nr_accesorii;
-    for(int i=0; i<ob.nr_accesorii; i++)
-        in >> ob.accesorii[i];
-    return in;
-}
 
-*/
+class Angajat
+{
+protected:
+    string nume_angajat;
+    int salariu, raion_accesoriu;
+    //radionul poate avea valoarea 1 pentru palarie si 2 pentru ochelari
+
+public:
+    Angajat()
+    {
+        nume_angajat = "Anonim";
+        salariu = 0;
+        raion_accesoriu = 0;
+    }
+
+    Angajat(string Nume_angajat = "Anonim", int Salariu = 0, int Raion_accesoriu = 0)
+    {
+        nume_angajat = Nume_angajat;
+        salariu = Salariu;
+        raion_accesoriu = Raion_accesoriu;
+    }
+
+    Angajat( Angajat& ob)
+    {
+        nume_angajat = ob.nume_angajat;
+        salariu = ob.salariu;
+        raion_accesoriu = ob.raion_accesoriu;
+    }
+    ~Angajat()
+    {
+        cout << "Angajatul a plecat acasa"<<"\n";
+    }
+
+    ///functie virtuala pentru Clasa abstracta
+    virtual void start() = 0
+    {
+        cout <<"Buna, cu ce pot sa te ajut?";
+    }
+
+};
+
+
+class Boutique
+{
+    vector <Accesoriu> accesorii;
+    vector <Client> clienti;
+    vector <Angajat> angajati;
+    int numarAccesorii;
+
+public:
+    Boutique(Accesoriu *aux, int n) /// Constructor de initializare cu parametrii
+    {
+        numarAccesorii = n;
+        for(int i=0; i<n; i++)
+        {
+            Accesoriu accesoriu(aux[i]);
+            accesorii.push_back(accesoriu);
+        }
+    }
+
+    Boutique() /// constructor de initializare fara parametrii
+    {
+        numarAccesorii = 0;
+    }
+
+    Boutique(Boutique &B) // Constructor de copiere
+    {
+
+    }
+
+    ~Boutique()
+    {
+        numarAccesorii = 0;
+        vector <Accesoriu>().swap(accesorii);
+        cout << "Magazin distrus" <<"\n";
+    }
+
+
+};
+
+
 
 int main()
 {
-    /*Accesoriu *arr = new Accesoriu[3];
-    Boutique b(arr,3);
-    b.Afisare();*/
-
-    /*Accesoriu A("palarie","alb", 10, 101);
-    Accesoriu D;
-    D=A;
-    cout << D;
-    cout << A;*/
-
-    /*Palarie ob("palarie","alb", 10, 101, 'S');
-    ob.afisare();
-    cout <<"\n";
-    Palarie ob2 = ob;
-    ob2.afisare();
-    cout <<"\n";*/
-
     vector<Accesoriu*> a;
     int n;
     cout << "Introdu numarul de accesorii: ";
@@ -242,8 +269,6 @@ Accesoriu& Accesoriu::operator=(Accesoriu &ob)  {
     }
 
     return *this;
-
-
 }
 ostream& operator<<(ostream& out, Accesoriu& ob)
 {
@@ -301,4 +326,27 @@ istream& operator>>(istream& in, Ochelari& ob)
     in >> dynamic_cast <Accesoriu&> (ob);
     in >> ob.forma;
     return in;
+}
+
+///Client
+ostream& operator<<(ostream& out, Client& ob)
+{
+    out << "Numele clientului este: " << ob.nume <<" si plateste  " << ob.pay;
+    return out;
+}
+
+istream& operator>>(istream& in, Client& ob)
+{
+    in >> ob.nume >> ob.pay;
+    return in;
+}
+
+Client& Client::operator=(Client& ob)
+{
+    if(this != ob)
+    {
+        this -> nume = ob.nume;
+        this -> pay = ob.pay;
+    }
+    return *this;
 }
